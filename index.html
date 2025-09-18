@@ -1,18 +1,17 @@
 <!DOCTYPE html>
-
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Smart Socket Hub</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
+    <link rel="stylesheet" href="style.css" /> </head>
 
   <body>
     <div class="dashboard-container">
       <header class="dashboard-header">
         <h1>Smart Socket Hub</h1>
         <p>Real-time environmental and device monitoring</p>
+        <button id="theme-toggle" class="theme-toggle-btn">Theme Mode</button>
       </header>
 
       <main class="dashboard-grid">
@@ -26,7 +25,6 @@
 
         <div class="panel temp-panel">
           <h2>Room Temperature</h2>
-
           <div class="data-display">
             <p id="temperature-value">-- °C</p>
           </div>
@@ -34,7 +32,6 @@
 
         <div class="panel air-quality-panel">
           <h2>Air Quality</h2>
-
           <div class="data-display">
             <p id="air-quality-value">-- ppm</p>
           </div>
@@ -46,8 +43,8 @@
         </div>
 
         <div class="panel log-panel">
-          <h2>Charging History</h2>
-          <ul id="history-list"></ul>
+            <h2>Charging History</h2>
+            <canvas id="charging-chart"></canvas>
         </div>
       </main>
     </div>

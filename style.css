@@ -2,227 +2,187 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
-
-
+/* Default (Dark) Theme Variables */
 :root {
-
     --bg-color: #1a1a2e;
-
     --card-bg-color: #272c43;
-
     --glow-color: #00d2ff;
-
     --text-color: #e0e0e0;
-
     --accent-color: #e94560;
-
+    --shadow-color: rgba(0, 0, 0, 0.4);
+    --border-color: rgba(255, 255, 255, 0.1);
 }
 
-
+/* Light Theme Variables */
+.light-theme {
+    --bg-color: #f0f4f8;
+    --card-bg-color: #ffffff;
+    --glow-color: #007bff;
+    --text-color: #333333;
+    --accent-color: #d13054;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --border-color: rgba(0, 0, 0, 0.1);
+}
 
 body {
-
     font-family: 'Poppins', sans-serif;
-
     background-color: var(--bg-color);
-
     color: var(--text-color);
-
     margin: 0;
-
     padding: 20px;
-
     display: flex;
-
     justify-content: center;
-
     align-items: center;
-
     min-height: 100vh;
-
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
-
-
 
 .dashboard-container {
-
-    width: 90%;
-
+    width: 95%;
     max-width: 1200px;
-
+    position: relative;
 }
-
-
 
 .dashboard-header {
-
     text-align: center;
-
     margin-bottom: 40px;
-
 }
-
-
 
 .dashboard-header h1 {
-
-    font-size: 3em;
-
+    font-size: clamp(2em, 5vw, 3.5em);
     font-weight: 600;
-
     letter-spacing: 2px;
-
     background: linear-gradient(90deg, var(--glow-color), var(--accent-color));
-
     -webkit-background-clip: text;
-
     -webkit-text-fill-color: transparent;
-
 }
 
-
+/* Theme toggle button styling */
+.theme-toggle-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px 15px;
+    border: none;
+    background-color: var(--card-bg-color);
+    color: var(--text-color);
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 1em;
+    box-shadow: 0 0 10px var(--shadow-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
 
 .dashboard-grid {
-
     display: grid;
-
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-
     gap: 20px;
-
+    grid-template-areas:
+        "fan-control"
+        "temp-panel"
+        "air-quality-panel"
+        "charging-panel"
+        "log-panel";
 }
 
+/* Assigning the grid areas to the panels */
+.fan-control { grid-area: fan-control; }
+.temp-panel { grid-area: temp-panel; }
+.air-quality-panel { grid-area: air-quality-panel; }
+.charging-panel { grid-area: charging-panel; }
+.log-panel { grid-area: log-panel; }
 
 
+/* Styles for the panels and their content */
 .panel {
-
     background-color: var(--card-bg-color);
-
     padding: 25px;
-
     border-radius: 15px;
-
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
-
-    border: 1px solid rgba(255, 255, 255, 0.1);
-
+    box-shadow: 0 0 20px var(--shadow-color);
+    border: 1px solid var(--border-color);
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
-
-
 
 .panel:hover {
-
     transform: translateY(-5px);
-
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
-
+    box-shadow: 0 0 30px var(--shadow-color);
 }
-
-
 
 .panel h2 {
-
     font-size: 1.2em;
-
     font-weight: 400;
-
     border-bottom: 2px solid var(--accent-color);
-
     padding-bottom: 10px;
-
     margin-bottom: 15px;
-
+    width: 100%;
 }
 
-
+.data-display {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
 
 .data-display p {
-
     font-size: 2.5em;
-
     font-weight: 600;
-
     color: var(--glow-color);
-
     text-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
-
     transition: color 0.3s ease-in-out;
-
+    margin: 0;
 }
-
-
 
 .status-indicator {
-
     font-size: 1.5em;
-
     font-weight: 600;
-
     padding: 5px 10px;
-
     border-radius: 5px;
-
     display: inline-block;
-
     color: #fff;
-
     background-color: #ccc;
-
     transition: background-color 0.3s ease-in-out;
-
 }
-
-
 
 #fan-status.active {
-
     background-color: var(--glow-color);
-
     box-shadow: 0 0 10px var(--glow-color);
-
 }
-
-
 
 #socket-status.active {
-
     background-color: #00ff6e;
-
     box-shadow: 0 0 10px #00ff6e;
-
 }
-
-
 
 .toggle-btn {
-
     background-color: var(--accent-color);
-
     color: #fff;
-
     border: none;
-
     padding: 10px 20px;
-
     border-radius: 5px;
-
     cursor: pointer;
-
     font-size: 1em;
-
     font-weight: 600;
-
     transition: background-color 0.3s;
-
+    margin-top: 15px;
 }
-
-
 
 .toggle-btn:hover {
-
     background-color: #ff6384;
-
 }
 
+/* Media Query for Desktop Screens */
+@media (min-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-areas:
+            "fan-control temp-panel air-quality-panel charging-panel"
+            "log-panel   log-panel    log-panel           log-panel";
+    }
+}
