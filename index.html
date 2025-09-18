@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Smart Socket Hub</title>
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div class="dashboard-container">
+      <header class="dashboard-header">
+        <h1>Smart Socket Hub</h1>
+
+        <p>Real-time environmental and device monitoring</p>
+      </header>
+
+      <main class="dashboard-grid">
+        <div class="panel fan-control">
+          <h2>Fan Status</h2>
+
+          <p id="fan-status" class="status-indicator">OFF</p>
+
+          <div class="manual-control">
+            <button id="fan-toggle-btn" class="toggle-btn">Toggle Fan</button>
+          </div>
+        </div>
+
+        <div class="panel temp-panel">
+          <h2>Room Temperature</h2>
+
+          <div class="data-display">
+            <p id="temperature-value">-- °C</p>
+          </div>
+        </div>
+
+        <div class="panel air-quality-panel">
+          <h2>Air Quality</h2>
+
+          <div class="data-display">
+            <p id="air-quality-value">-- ppm</p>
+          </div>
+        </div>
+
+        <div class="panel charging-panel">
+          <h2>Socket Status</h2>
+
+          <p id="socket-status" class="status-indicator">NOT IN USE</p>
+        </div>
+
+        <div class="panel log-panel">
+          <h2>Charging History</h2>
+
+          <ul id="history-list"></ul>
+        </div>
+      </main>
+    </div>
+
+    <script src="script.js" type="module"></script>
+  </body>
+</html>
