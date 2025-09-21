@@ -4,7 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Smart Socket Hub</title>
-    <link rel="stylesheet" href="style.css" /> </head>
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
   <body>
     <div class="dashboard-container">
@@ -18,9 +19,6 @@
         <div class="panel fan-control">
           <h2>Fan Status</h2>
           <p id="fan-status" class="status-indicator">OFF</p>
-          <div class="manual-control">
-            <button id="fan-toggle-btn" class="toggle-btn">Toggle Fan</button>
-          </div>
         </div>
 
         <div class="panel temp-panel">
@@ -40,11 +38,14 @@
         <div class="panel charging-panel">
           <h2>Socket Status</h2>
           <p id="socket-status" class="status-indicator">NOT IN USE</p>
+          <div class="manual-control">
+            <button id="socket-toggle-btn" class="toggle-btn">Toggle Socket</button>
+          </div>
         </div>
 
         <div class="panel log-panel">
-            <h2>Charging History</h2>
-            <canvas id="charging-chart"></canvas>
+          <h2>Socket History</h2>
+          <canvas id="socket-chart"></canvas>
         </div>
       </main>
     </div>

@@ -4,38 +4,38 @@ import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebase
 import 'https://cdn.jsdelivr.net/npm/chart.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+    // 1. Theme Toggle
     const themeToggleBtn = document.getElementById('theme-toggle');
-
     if (themeToggleBtn) {
         themeToggleBtn.addEventListener('click', () => {
             document.body.classList.toggle('light-theme');
         });
     }
-});
 
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. Firebase Project Configuration
+    // 2. Firebase Project Configuration
     const firebaseConfig = {
-      apiKey: "AIzaSyBdxqutV_IxDNWC6TwuSS9qlMYXeIaGx3M",
-      authDomain: "smart-charging-socket-18a2f.firebaseapp.com",
-      projectId: "smart-charging-socket-18a2f",
-      storageBucket: "smart-charging-socket-18a2f.firebasestorage.app",
-      messagingSenderId: "985649396695",
-      appId: "1:985649396695:web:be3394e38ab343ce8ee992",
-      measurementId: "G-BRSTL9SWZW"
-    };
+    apiKey: "AIzaSyBdxqutV_IxDNWC6TwuSS9qlMYXeIaGx3M",
+    authDomain: "smart-charging-socket-18a2f.firebaseapp.com",
+    databaseURL: "https://smart-charging-socket-18a2f-default-rtdb.firebaseio.com",
+    projectId: "smart-charging-socket-18a2f",
+    storageBucket: "smart-charging-socket-18a2f.firebasestorage.app",
+    messagingSenderId: "985649396695",
+    appId: "1:985649396695:web:8201ae81e27dc3748ee992",
+    measurementId: "G-GVKE1GC81V"
+  };
+
 
     // Initialize Firebase and the database service
     const app = initializeApp(firebaseConfig);
-    const database = getDatabase(app);
+    const analytics = getAnalytics(app);
 
-    // Get a reference to the specific database path where the ESP32 sends sensor data
+
+    // Get a reference to the specific database paths
     const sensorDataRef = ref(database, 'sensor_data');
+    const socketControlRef = ref(database, 'manual_control/socket_toggle');
+    const chargingHistoryRef = ref(database, 'charging_history');
 
-    // Get a reference for manual fan control
-    const fanControlRef = ref(database, 'manual_control/fan_toggle');
-
-    // 2. Real-time Data Listener for Sensor Data
+    // 3. Real-time Data Listener for Sensor Data
     onValue(sensorDataRef, (snapshot) => {
         const data = snapshot.val();
         if (data) {
@@ -47,28 +47,22 @@ document.addEventListener('DOMContentLoaded', () => {
             fanStatusEl.classList.toggle('active', data.fan_status);
 
             const socketStatusEl = document.getElementById('socket-status');
-            socketStatusEl.textContent = data.is_charging ? 'CHARGING' : 'NOT IN USE';
-            socketStatusEl.classList.toggle('active', data.is_charging);
-        } else {
-            // Display a message if no data is available
-            document.getElementById('temperature-value').textContent = '-- °C';
-            document.getElementById('air-quality-value').textContent = '-- ppm';
-            document.getElementById('fan-status').textContent = 'OFFLINE';
-            document.getElementById('socket-status').textContent = 'OFFLINE';
+            socketStatusEl.textContent = data.socket_status ? 'ON' : 'OFF';
+            socketStatusEl.classList.toggle('active', data.socket_status);
         }
     });
 
-    // 3. Chart Setup and Data Listener
-    const ctx = document.getElementById('charging-chart').getContext('2d');
-    let chargingChart = new Chart(ctx, {
-        type: 'line', // Line chart is often better for time-series data
+    // 4. Chart Setup and Data Listener
+    const ctx = document.getElementById('socket-chart').getContext('2d');
+    let socketChart = new Chart(ctx, {
+        type: 'bar',
         data: {
             labels: [],
             datasets: [{
-                label: 'Charging Duration (minutes)',
+                label: 'Socket Status',
                 data: [],
-                backgroundColor: 'rgba(0, 210, 255, 0.5)',
-                borderColor: 'rgba(0, 210, 255, 1)',
+                backgroundColor: 'rgba(0, 255, 110, 0.5)',
+                borderColor: 'rgba(0, 255, 110, 1)',
                 borderWidth: 1
             }]
         },
@@ -81,23 +75,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const chargingHistoryRef = ref(database, 'charging_history');
     onValue(chargingHistoryRef, (snapshot) => {
         const historyData = snapshot.val();
         if (historyData) {
             const labels = Object.keys(historyData);
             const dataPoints = Object.values(historyData).map(item => item.duration);
-
-            chargingChart.data.labels = labels;
-            chargingChart.data.datasets[0].data = dataPoints;
-            chargingChart.update();
+            socketChart.data.labels = labels;
+            socketChart.data.datasets[0].data = dataPoints;
+            socketChart.update();
         }
     });
 
-    // 4. User Interaction - Manual Fan Toggle
-    document.getElementById('fan-toggle-btn').addEventListener('click', () => {
-        // Send a boolean value to the database to toggle the fan
-        set(fanControlRef, true);
-        alert('Toggling fan status via manual control!');
+    // 5. User Interaction - Manual Socket Toggle
+    document.getElementById('socket-toggle-btn').addEventListener('click', () => {
+        set(socketControlRef, true);
     });
 });

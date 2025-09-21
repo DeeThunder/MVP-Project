@@ -183,6 +183,6 @@ body {
         grid-template-columns: repeat(4, 1fr);
         grid-template-areas:
             "fan-control temp-panel air-quality-panel charging-panel"
-            "log-panel   log-panel    log-panel           log-panel";
+            "log-panel   log-panel    log-panel               log-panel";
     }
 }
