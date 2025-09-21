@@ -1,5 +1,3 @@
-/* styles.css */
-
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
 /* Default (Dark) Theme Variables */
@@ -57,7 +55,6 @@ body {
     -webkit-text-fill-color: transparent;
 }
 
-/* Theme toggle button styling */
 .theme-toggle-btn {
     position: absolute;
     top: 20px;
@@ -73,6 +70,32 @@ body {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+.theme-toggle-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px var(--shadow-color);
+}
+
+.connection-status {
+    text-align: center;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.connected {
+    background-color: rgba(0, 255, 110, 0.2);
+    color: #00ff6e;
+    box-shadow: 0 0 10px rgba(0, 255, 110, 0.3);
+}
+
+.disconnected {
+    background-color: rgba(255, 99, 132, 0.2);
+    color: #ff6384;
+    box-shadow: 0 0 10px rgba(255, 99, 132, 0.3);
+}
+
 .dashboard-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -85,15 +108,12 @@ body {
         "log-panel";
 }
 
-/* Assigning the grid areas to the panels */
 .fan-control { grid-area: fan-control; }
 .temp-panel { grid-area: temp-panel; }
 .air-quality-panel { grid-area: air-quality-panel; }
 .charging-panel { grid-area: charging-panel; }
 .log-panel { grid-area: log-panel; }
 
-
-/* Styles for the panels and their content */
 .panel {
     background-color: var(--card-bg-color);
     padding: 25px;
@@ -106,6 +126,7 @@ body {
     justify-content: center;
     align-items: center;
     text-align: center;
+    backdrop-filter: blur(10px);
 }
 
 .panel:hover {
@@ -142,47 +163,152 @@ body {
 .status-indicator {
     font-size: 1.5em;
     font-weight: 600;
-    padding: 5px 10px;
-    border-radius: 5px;
+    padding: 8px 15px;
+    border-radius: 25px;
     display: inline-block;
     color: #fff;
-    background-color: #ccc;
-    transition: background-color 0.3s ease-in-out;
+    background-color: #666;
+    transition: all 0.3s ease-in-out;
+    border: 2px solid transparent;
 }
 
 #fan-status.active {
     background-color: var(--glow-color);
-    box-shadow: 0 0 10px var(--glow-color);
+    box-shadow: 0 0 15px var(--glow-color);
+    border-color: var(--glow-color);
 }
 
 #socket-status.active {
     background-color: #00ff6e;
-    box-shadow: 0 0 10px #00ff6e;
+    box-shadow: 0 0 15px #00ff6e;
+    border-color: #00ff6e;
 }
 
 .toggle-btn {
     background-color: var(--accent-color);
     color: #fff;
     border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+    padding: 12px 25px;
+    border-radius: 25px;
     cursor: pointer;
     font-size: 1em;
     font-weight: 600;
-    transition: background-color 0.3s;
+    transition: all 0.3s ease;
     margin-top: 15px;
+    box-shadow: 0 4px 15px rgba(233, 69, 96, 0.3);
 }
 
-.toggle-btn:hover {
+.toggle-btn:hover:not(:disabled) {
     background-color: #ff6384;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(233, 69, 96, 0.4);
 }
 
-/* Media Query for Desktop Screens */
+.toggle-btn:disabled {
+    background-color: #666;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+.log-content {
+    max-height: 250px;
+    overflow-y: auto;
+    width: 100%;
+    text-align: left;
+    font-size: 0.9em;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 10px;
+}
+
+.log-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.log-content::-webkit-scrollbar-track {
+    background: var(--card-bg-color);
+    border-radius: 3px;
+}
+
+.log-content::-webkit-scrollbar-thumb {
+    background: var(--accent-color);
+    border-radius: 3px;
+}
+
+.log-entry {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color 0.2s ease;
+}
+
+.log-entry:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 5px;
+    padding-left: 5px;
+}
+
+.log-entry:last-child {
+    border-bottom: none;
+}
+
+.timestamp {
+    font-weight: 600;
+    color: var(--glow-color);
+    font-size: 0.9em;
+}
+
+/* Responsive Design */
 @media (min-width: 768px) {
     .dashboard-grid {
         grid-template-columns: repeat(4, 1fr);
         grid-template-areas:
             "fan-control temp-panel air-quality-panel charging-panel"
-            "log-panel   log-panel    log-panel               log-panel";
+            "log-panel log-panel log-panel log-panel";
     }
+}
+
+@media (max-width: 480px) {
+    .dashboard-container {
+        width: 100%;
+        padding: 0 10px;
+    }
+    
+    .panel {
+        padding: 20px;
+    }
+    
+    .data-display p {
+        font-size: 2em;
+    }
+    
+    .theme-toggle-btn {
+        position: relative;
+        top: auto;
+        right: auto;
+        margin: 10px auto;
+        display: block;
+    }
+}
+
+/* Loading Animation */
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.loading {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Success Animation */
+@keyframes success {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.success-animation {
+    animation: success 0.3s ease-in-out;
 }
